@@ -3,6 +3,7 @@ package com.rs2.note.common.exceptions;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,7 +14,7 @@ public class ErrorDTO {
 
     private String message;
 
-    private List<FieldErrorDTO> fieldErrors;
+    private List<FieldErrorDTO> fieldErrors = new ArrayList<>();
 
     @Override
     public String toString() {

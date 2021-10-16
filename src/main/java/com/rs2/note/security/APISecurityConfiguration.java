@@ -1,5 +1,6 @@
 package com.rs2.note.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,22 +21,17 @@ public class APISecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
 
-        http
-                .antMatcher("/api/**/**")
+        http.antMatcher("/api/**/**")
                 .authorizeRequests()
                 .antMatchers(
-                        "/api/authenticate/authenticateByPin",
-                        "/api/phoneNumberAdapter/validate**/**",
-                        "/api/users/isValidPasswordFormat",
-                        "/api/dev/smssync**/**",
-                        "/api/ussd**/**"
+                        "/api/authenticate/authenticateByUsername"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .authenticationEntryPoint(apiAuthenticationFailureHandler())
                 .and()
-                .authenticationProvider(new AuthenticationProviderImpl(SystemChannelTypeEnum.REST, authenticationService, CredentialsTypeEnum.PIN))
+                .authenticationProvider(new AuthenticationProviderImpl(authenticationService))
                 .exceptionHandling().authenticationEntryPoint(apiAuthenticationFailureHandler())
                 .and()
                 .headers()

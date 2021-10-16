@@ -1,36 +1,31 @@
 package com.rs2.note.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
 public class AuthenticationProviderImpl implements AuthenticationProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthenticationProviderImpl.class)
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationProviderImpl.class);
 
-    private final AuthenticationService authenticationService
-    private final SystemChannelTypeEnum systemChannelType
-    private final CredentialsTypeEnum credentialsType
+    private final AuthenticationService authenticationService;
 
-    AuthenticationProviderImpl(SystemChannelTypeEnum systemChannelType, AuthenticationService authenticationService, CredentialsTypeEnum credentialsType) {
+    AuthenticationProviderImpl(final AuthenticationService authenticationService){
+        this.authenticationService = authenticationService;
+    }
 
-        this.systemChannelType = systemChannelType;
-        this.authenticationService = authenticationService
-        this.credentialsType = credentialsType
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        assert this.credentialsType != null
+        return authenticationService.loginByUsernameAndPassword((String) authentication.getPrincipal(), (String)authentication.getCredentials());
 
     }
 
     @Override
-    Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
-        return authenticationService.loginByEmail(systemChannelType, (String) authentication.principal, (String)authentication.credentials, credentialsType)
-
-    }
-
-    @Override
-    boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken)
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }

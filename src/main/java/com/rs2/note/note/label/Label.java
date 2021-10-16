@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "note", indexes = {
+@Table(name = "label", indexes = {
         @Index(name = "label_idx_name", columnList = "name", unique = true)
 })
 public class Label extends AbstractEntity implements Serializable {

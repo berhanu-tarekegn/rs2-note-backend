@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/notes")
 public class NoteRestController {
@@ -17,6 +19,30 @@ public class NoteRestController {
 
     NoteRestController(final NoteService noteService) {
         this.noteService = noteService;
+    }
+
+    @GetMapping
+    List<Note> getAllNotes(){
+
+        log.debug("Finding all notes with no filter");
+
+        List<Note> notes = noteService.findAllNotes();
+
+        log.debug(String.format("Found %d notes", notes.size()));
+
+        return notes;
+    }
+
+    @GetMapping(path = "/{filter}")
+    List<Note> getAllNotes(@PathVariable("filter") String filter){
+
+        log.debug(String.format("Finding all notes with  filter: %s", filter));
+
+        List<Note> notes = noteService.findNotes(filter);
+
+        log.debug(String.format("Found %d notes with filter %s", notes.size(), filter));
+
+        return notes;
     }
 
     @PostMapping

@@ -43,23 +43,23 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
 
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(UserNotFoundException.class)
-    @ResponseBody
-    public ErrorDTO handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
-
-        ErrorDTO errorDTO = new ErrorDTO();
-
-        errorDTO.setMessage(ex.getMessage());
-        errorDTO.setCode(ErrorCodes.USER_NOT_FOUND_ERROR);
-
-        log.debug(errorDTO.toString(), ex);
-
-        request.removeAttribute(HandlerMapping.PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE, WebRequest.SCOPE_REQUEST);
-
-        return errorDTO;
-
-    }
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//    @ExceptionHandler(UserNotFoundException.class)
+//    @ResponseBody
+//    public ErrorDTO handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+//
+//        ErrorDTO errorDTO = new ErrorDTO();
+//
+//        errorDTO.setMessage(ex.getMessage());
+//        errorDTO.setCode(ErrorCodes.USER_NOT_FOUND_ERROR);
+//
+//        log.debug(errorDTO.toString(), ex);
+//
+//        request.removeAttribute(HandlerMapping.PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE, WebRequest.SCOPE_REQUEST);
+//
+//        return errorDTO;
+//
+//    }
 
 
 

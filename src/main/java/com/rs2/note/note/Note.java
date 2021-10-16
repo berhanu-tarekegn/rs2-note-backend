@@ -28,9 +28,9 @@ public class Note extends AbstractEntity implements Serializable {
     private String content;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "NoteLabel",
-            joinColumns = { @JoinColumn(name = "noteId", columnDefinition = "bigint") },
-            inverseJoinColumns = { @JoinColumn(name = "labelId", columnDefinition = "bigint") })
+    @JoinTable(name = "note_label",
+            joinColumns = { @JoinColumn(name = "note_id", columnDefinition = "bigint") },
+            inverseJoinColumns = { @JoinColumn(name = "label_id", columnDefinition = "bigint") })
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Label> noteLabels;
 
