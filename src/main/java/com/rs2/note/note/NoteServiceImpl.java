@@ -4,9 +4,11 @@ import com.rs2.note.common.exceptions.ItemAlreadyExistsException;
 import com.rs2.note.common.exceptions.ItemNotFoundException;
 import com.rs2.note.note.label.Label;
 import com.rs2.note.note.label.LabelService;
+import com.rs2.note.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class NoteServiceImpl implements NoteService {
 
     private final LabelService labelService;
 
+
     @Autowired
     public NoteServiceImpl(NoteRepository noteRepository, LabelService labelService) {
 
@@ -28,6 +31,7 @@ public class NoteServiceImpl implements NoteService {
         this.labelService = labelService;
     }
 
+    @Secured({User.ROLE_MANAGER})
     @Override
     public List<Note> findAllNotes() {
 
@@ -36,6 +40,7 @@ public class NoteServiceImpl implements NoteService {
         return noteRepository.findAll();
     }
 
+    @Secured({User.ROLE_MANAGER})
     @Override
     public List<Note> findNotes(String filter) {
 
@@ -48,6 +53,7 @@ public class NoteServiceImpl implements NoteService {
         return  notes;
     }
 
+    @Secured({User.ROLE_MANAGER})
     @Override
     public Note createNote(Note note) {
 
@@ -85,6 +91,7 @@ public class NoteServiceImpl implements NoteService {
         return persistedNote;
     }
 
+    @Secured({User.ROLE_MANAGER})
     @Override
     public Note updateNote(Note note) {
 
@@ -97,6 +104,7 @@ public class NoteServiceImpl implements NoteService {
         return updateNote;
     }
 
+    @Secured({User.ROLE_MANAGER})
     @Override
     public void deleteNoteById(Long id) {
 
@@ -110,6 +118,7 @@ public class NoteServiceImpl implements NoteService {
 
     }
 
+    @Secured({User.ROLE_MANAGER})
     @Override
     public void deleteNote(Note note) {
         log.debug(String.format("Deleting note by id : %d", note.getId()));

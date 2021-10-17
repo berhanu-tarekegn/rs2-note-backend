@@ -3,18 +3,24 @@ package com.rs2.note.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 @Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Order(4)
+@Order(1)
 public class APISecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AuthenticationService authenticationService;
+
+    @Autowired
+    AuthenticationProviderImpl authenticationProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -31,7 +37,7 @@ public class APISecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .authenticationEntryPoint(apiAuthenticationFailureHandler())
                 .and()
-                .authenticationProvider(new AuthenticationProviderImpl(authenticationService))
+                .authenticationProvider(authenticationProvider)
                 .exceptionHandling().authenticationEntryPoint(apiAuthenticationFailureHandler())
                 .and()
                 .headers()

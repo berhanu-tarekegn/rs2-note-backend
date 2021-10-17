@@ -3,8 +3,10 @@ package com.rs2.note.note.label;
 import com.rs2.note.common.exceptions.ItemAlreadyExistsException;
 import com.rs2.note.common.exceptions.ItemNotFoundException;
 import com.rs2.note.note.Note;
+import com.rs2.note.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,6 +34,7 @@ public class LabelServiceImpl implements LabelService {
         return label;
     }
 
+    @Secured({User.ROLE_MANAGER})
     @Override
     public Label createLabel(Label label) {
 

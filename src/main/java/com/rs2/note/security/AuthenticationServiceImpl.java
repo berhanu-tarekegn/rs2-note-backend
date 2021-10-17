@@ -9,7 +9,6 @@ import com.rs2.note.user.credential.UserCredentialRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -58,6 +57,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User user = userRepository.findByEmailIgnoreCase(email);
 
+        List<User> users = userRepository.findAll();
+
         if(null == user) {
 
             if(log.isInfoEnabled())
@@ -90,9 +91,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
-        //TODO: add roles to the user and based on the role limit the access; for now all authenticated user has the same level of access
+        //TODO: fetch the roles from Role table using the passed user;
+
+        grantedAuthorities.add((GrantedAuthority) () -> User.ROLE_MANAGER);
 
         return grantedAuthorities;
 
+    }
+
+    //TODO: Enable encoded password
+    private String encodePassword(String password) {
+
+        return passwordEncoder.encode(password);
     }
 }

@@ -3,6 +3,8 @@ package com.rs2.note.user;
 import com.rs2.note.common.AbstractEntity;
 import com.rs2.note.user.credential.UserCredential;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -14,8 +16,11 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "user")
-@Data
+@Getter
+@Setter
 public class User extends AbstractEntity implements Serializable {
+
+    public static final String ROLE_MANAGER = "MANAGER";
 
     @NotNull(message = "error.validation.user.name.required")
     @Size(max = 32, message = "error.validation.user.name.invalid.length")
@@ -33,6 +38,5 @@ public class User extends AbstractEntity implements Serializable {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, optional = true, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserCredential credential;
-
 
 }

@@ -29,5 +29,7 @@ public void commence(HttpServletRequest request, HttpServletResponse response, A
             errorDTO.setMessage(authException.getMessage());
             mapper.writeValue(out, errorDTO);
             out.flush();
-            }
-            }
+
+    }
+
+}
