@@ -12,6 +12,7 @@ The project code is structured based on the features and each feature has differ
 - SPRING JPA,
 - SPRING DATA,
 - HIBERNATE,
+- Junit & Mockito
 - H2 IN MEMORY DATABASE,
 - Gradle
 
