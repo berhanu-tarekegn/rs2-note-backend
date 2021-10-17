@@ -37,8 +37,6 @@ Copy the script data.sql under `src/main/resource/data.sql` and execute the init
 
 Use the username and password combination to access the endpoints.
 
-and run the `index.html` file on your browser.
-
 ## Authors
 
 👤 **Berhanu Tarekegn**
