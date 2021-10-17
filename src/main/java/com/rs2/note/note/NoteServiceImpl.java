@@ -31,7 +31,6 @@ public class NoteServiceImpl implements NoteService {
         this.labelService = labelService;
     }
 
-    @Secured({User.ROLE_MANAGER})
     @Override
     public List<Note> findAllNotes() {
 
@@ -40,7 +39,6 @@ public class NoteServiceImpl implements NoteService {
         return noteRepository.findAll();
     }
 
-    @Secured({User.ROLE_MANAGER})
     @Override
     public List<Note> findNotes(String filter) {
 
@@ -53,7 +51,6 @@ public class NoteServiceImpl implements NoteService {
         return  notes;
     }
 
-    @Secured({User.ROLE_MANAGER})
     @Override
     public Note createNote(Note note) {
 
@@ -91,7 +88,6 @@ public class NoteServiceImpl implements NoteService {
         return persistedNote;
     }
 
-    @Secured({User.ROLE_MANAGER})
     @Override
     public Note updateNote(Note note) {
 
@@ -104,7 +100,6 @@ public class NoteServiceImpl implements NoteService {
         return updateNote;
     }
 
-    @Secured({User.ROLE_MANAGER})
     @Override
     public void deleteNoteById(Long id) {
 
@@ -118,7 +113,6 @@ public class NoteServiceImpl implements NoteService {
 
     }
 
-    @Secured({User.ROLE_MANAGER})
     @Override
     public void deleteNote(Note note) {
         log.debug(String.format("Deleting note by id : %d", note.getId()));

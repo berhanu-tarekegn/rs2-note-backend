@@ -34,7 +34,6 @@ public class LabelServiceImpl implements LabelService {
         return label;
     }
 
-    @Secured({User.ROLE_MANAGER})
     @Override
     public Label createLabel(Label label) {
 
