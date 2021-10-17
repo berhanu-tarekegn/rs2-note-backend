@@ -27,7 +27,16 @@ To run the project smoothly, you must have the following installed on your machi
 - Git
 
 ### Setup
-You need to clone the project by running `git clone https://github.com/berhanu-tarekegn/rs2-note-backend.git` You'd then navigate to the location to which you cloned the project and run the `index.html` file on your browser.
+You need to clone the project by running `git clone https://github.com/berhanu-tarekegn/rs2-note-backend.git` You'd then navigate to the location to which you cloned the project and then run the app. 
+
+The app is set to run at port: 7088
+you can access the h2 database using `localhost:7088/rs2-note` with username: `rs2` and password: `rs2`
+
+Copy the script data.sql under `src/main/resource/data.sql` and execute the init script using the h2 console to populate the user and credential table
+
+Use the username and password combination to access the endpoints.
+
+and run the `index.html` file on your browser.
 
 ## Authors
 
