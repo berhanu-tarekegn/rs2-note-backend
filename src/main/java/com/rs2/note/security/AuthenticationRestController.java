@@ -36,11 +36,8 @@ public class AuthenticationRestController {
         if(log.isDebugEnabled())
             log.debug(String.format("Authenticated using email: %s", authenticatedUser.getEmail()));
 
-        AuthenticationResponseDTO authenticationResponse = new AuthenticationResponseDTO();
-        authenticationResponse.setCredentials(authenticatedUser.getCredential().getCredentials());
-        authenticationResponse.setPrincipal(authenticationRequest.getPrincipal());
 
-        return authenticationResponse;
+        return new AuthenticationResponseDTO(authenticationRequest.getPrincipal(), authenticationRequest.getCredentials());
     }
 
 }

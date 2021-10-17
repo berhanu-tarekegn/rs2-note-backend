@@ -1,8 +1,14 @@
-insert into USER (EMAIL, NAME, SURNAME)
-values ('test@rs2.com', 'final', 'test');
+insert into USER (ID, EMAIL, NAME, SURNAME)
+values (1, 'test@rs2.com', 'final', 'test');
 
-insert into USER (EMAIL, NAME, SURNAME)
-values ('beta@rs2.com', 'note', 'app');
+insert into USER (ID, EMAIL, NAME, SURNAME)
+values (2, 'beta@rs2.com', 'note', 'app');
+
+insert into ROLE(ID, NAME, USER_ID)
+values (1, 'ROLE_MANAGER', 1);
+
+insert into ROLE(ID, NAME, USER_ID)
+values (2, 'ROLE_MANAGER', 2);
 
 -- 'pass$rs2' = '$2a$10$gRYq1Ijeu3acbaV1wQZwJOCYyfBLYL6il0RWwUTyh.HOqCR0Ylc0e'
 

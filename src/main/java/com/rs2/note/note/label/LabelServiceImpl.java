@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class LabelServiceImpl implements LabelService {
 
@@ -44,6 +47,17 @@ public class LabelServiceImpl implements LabelService {
         log.debug(String.format("Created a new label with id: %d and name: %s", label.getId(), persistedLabel.getName()));
 
         return persistedLabel;
+    }
+
+    @Secured({User.ROLE_MANAGER})
+    @Override
+    public void deleteLabel(Label label) {
+
+        log.debug(String.format("Deleting a label by id : %d", label.getId()));
+
+        labelRepository.delete(label);
+
+        log.debug("Label with id %d deleted");
     }
 
 }

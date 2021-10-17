@@ -8,4 +8,6 @@ public interface LabelService {
 
     public Label createLabel(Label label);
 
+    public void deleteLabel(Label label);
+
 }

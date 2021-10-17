@@ -6,10 +6,13 @@ import com.rs2.note.user.User;
 import com.rs2.note.user.credential.UserCredential;
 import com.rs2.note.user.UserRepository;
 import com.rs2.note.user.credential.UserCredentialRepository;
+import com.rs2.note.user.role.Role;
+import com.rs2.note.user.role.RoleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("authenticationService")
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -25,15 +29,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
 
+    private final RoleRepository roleRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final UserCredentialRepository userCredentialRepository;
 
     @Autowired
-    public AuthenticationServiceImpl(final UserRepository userRepository, UserCredentialRepository userCredentialRepository) {
+    public AuthenticationServiceImpl(final UserRepository userRepository, UserCredentialRepository userCredentialRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.passwordEncoder = passwordEncoder;
         this.userCredentialRepository = userCredentialRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -42,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User authenticatedUser = authenticateByUsernameAndPassword(email, credentials);
 
         AuthenticationToken authenticationToken = new AuthenticationToken(authenticatedUser,
-                email, credentials, getGrantedAuthorities(authenticatedUser));
+                email, authenticatedUser.getCredential().getCredentials(), getGrantedAuthorities(authenticatedUser));
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
@@ -56,8 +63,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             log.debug(String.format("Authenticating %s using", email));
 
         User user = userRepository.findByEmailIgnoreCase(email);
-
-        List<User> users = userRepository.findAll();
 
         if(null == user) {
 
@@ -79,8 +84,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         boolean isAuthenticated = passwordEncoder.matches(credentials, userCredential.getCredentials());
 
-        if(isAuthenticated)
+        if(isAuthenticated) {
             return user;
+        }
 
         else
             throw new InvalidCredentialsException(email);
@@ -89,11 +95,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private List<GrantedAuthority> getGrantedAuthorities(User user) {
 
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-
-        //TODO: fetch the roles from Role table using the passed user;
-
-        grantedAuthorities.add((GrantedAuthority) () -> User.ROLE_MANAGER);
+        List<GrantedAuthority> grantedAuthorities = roleRepository.findRoleByUser(user).stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 
         return grantedAuthorities;
 

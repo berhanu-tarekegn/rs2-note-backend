@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,7 @@ public class NoteRestController {
     }
 
     @GetMapping
-    List<Note> getAllNotes(){
+    List<Note> getAllNotes(HttpServletRequest request){
 
         log.debug("Finding all notes with no filter");
 

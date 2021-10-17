@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticationProviderImpl.class);
@@ -23,7 +23,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        return authenticationService.loginByUsernameAndPassword((String) authentication.getPrincipal(), (String)authentication.getCredentials());
+        return authenticationService.loginByUsernameAndPassword(authentication.getPrincipal().toString(), authentication.getCredentials().toString());
 
     }
 
