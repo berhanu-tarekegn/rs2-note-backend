@@ -1,5 +1,6 @@
 package com.rs2.note.security;
 
+import com.rs2.note.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,9 +12,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,10 +27,13 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 public class APISecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    AuthenticationService authenticationService;
+    JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     AuthenticationProviderImpl authenticationProvider;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Bean
     @Override
@@ -35,7 +44,10 @@ public class APISecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable();
+        http.cors().and().csrf().disable();
+
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
 
         http.antMatcher("/api/**/**")
                 .authorizeRequests()
@@ -47,8 +59,13 @@ public class APISecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .authenticationEntryPoint(apiAuthenticationFailureHandler())
                 .and()
+                .addFilter(new JWTTokenAuthorizationFilter(authenticationManagerBean(), jwtTokenUtil, userRepository))
+                .addFilter(new JwtTokenAuthenticationFilter(authenticationManagerBean(), jwtTokenUtil))
                 .authenticationProvider(authenticationProvider)
                 .exceptionHandling().authenticationEntryPoint(apiAuthenticationFailureHandler());
+
+
+
     }
 
     private static AuthenticationEntryPoint apiAuthenticationFailureHandler() {
@@ -58,6 +75,19 @@ public class APISecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder () {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 
 }

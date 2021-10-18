@@ -4,6 +4,7 @@ import com.rs2.note.common.AbstractEntity;
 import com.rs2.note.user.role.Role;
 import com.rs2.note.user.credential.UserCredential;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +31,7 @@ public class User extends AbstractEntity implements UserDetails, Serializable {
 
     public static final String ROLE_MANAGER = "ROLE_MANAGER";
 
+    @JsonIgnore(value = true)
     @NotNull(message = "error.validation.user.name.required")
     @Size(max = 32, message = "error.validation.user.name.invalid.length")
     private String name;
@@ -86,5 +88,13 @@ public class User extends AbstractEntity implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setUsername(String username) {
+        setEmail(username);
+    }
+
+    public void setPassword(String password) {
+        setCredential(new UserCredential(this, password));
     }
 }

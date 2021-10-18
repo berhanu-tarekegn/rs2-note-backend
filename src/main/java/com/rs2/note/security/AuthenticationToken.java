@@ -14,6 +14,8 @@ public class AuthenticationToken extends UsernamePasswordAuthenticationToken {
 
     private User user;
 
+    private String token;
+
     AuthenticationToken(User user, String principal, String credentials, Collection<? extends GrantedAuthority> authorities) {
 
         super(principal, credentials, authorities);

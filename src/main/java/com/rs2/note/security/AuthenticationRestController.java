@@ -1,6 +1,5 @@
 package com.rs2.note.security;
 
-import com.rs2.note.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +25,18 @@ public class AuthenticationRestController {
     }
 
     @PostMapping(value = "/authenticateByUsername")
-    AuthenticationResponseDTO authenticate(@Validated @RequestBody AuthenticationRequestDTO authenticationRequest) {
+    AuthenticationToken authenticate(@Validated @RequestBody AuthenticationRequestDTO authenticationRequest) {
 
         if(log.isDebugEnabled())
-            log.debug(String.format("Authenticating using email: %s", authenticationRequest.getPrincipal()));
+            log.debug(String.format("Authenticating using email: %s", authenticationRequest.getUsername()));
 
-        User authenticatedUser = authenticationService.authenticateByUsernameAndPassword(authenticationRequest.getPrincipal(), authenticationRequest.getCredentials());
+        AuthenticationToken authenticatedUser = authenticationService.loginByUsernameAndPassword(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         if(log.isDebugEnabled())
-            log.debug(String.format("Authenticated using email: %s", authenticatedUser.getEmail()));
+            log.debug(String.format("Authenticated using email: %s", authenticatedUser.getUser().getUsername()));
 
 
-        return new AuthenticationResponseDTO(authenticationRequest.getPrincipal(), authenticationRequest.getCredentials());
+        return authenticatedUser;
     }
 
 }

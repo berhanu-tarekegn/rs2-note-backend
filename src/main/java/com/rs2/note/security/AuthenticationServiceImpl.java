@@ -64,6 +64,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User user = userRepository.findByEmailIgnoreCase(email);
 
+        List<Role> roles = roleRepository.findRoleByUser(user);
+
+        user.setRoles(roles);
+
         if(null == user) {
 
             if(log.isInfoEnabled())

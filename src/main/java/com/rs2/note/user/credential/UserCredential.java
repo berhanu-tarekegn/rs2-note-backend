@@ -2,7 +2,9 @@ package com.rs2.note.user.credential;
 
 import com.rs2.note.common.AbstractEntity;
 import com.rs2.note.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,6 +19,8 @@ import java.util.List;
         @Index(name = "user_credential_idx_user", columnList = "user_id")
 })
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserCredential extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = -6453990222527439596L;

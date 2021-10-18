@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthenticationRequestDTO {
 
-    private String principal;
+    private String username;
 
-    private String credentials;
+    private String password;
 }
